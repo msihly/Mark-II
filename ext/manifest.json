@@ -1,0 +1,27 @@
+{
+  "name": "Mark II Ext",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "permissions": ["<all_urls>", "tabs", "contextMenus"],
+  "browser_specific_settings": {
+    "gecko": { "id": "{514afcd8-2e89-4e69-aa76-d5d7f188c378}" }
+  },
+  "icons": {
+    "16": "media/logo-16.png",
+    "32": "media/logo-32.png",
+    "48": "media/logo-48.png",
+    "128": "media/logo-128.png"
+  },
+  "browser_action": {
+    "default_icon": {
+      "16": "media/logo-16.png",
+      "32": "media/logo-32.png",
+      "48": "media/logo-48.png",
+      "128": "media/logo-128.png"
+    },
+    "default_title": "Add this page to Mark II",
+    "default_popup": "popup.html"
+  },
+  "options_page": "index.html",
+  "background": { "scripts": ["background.js"] }
+}

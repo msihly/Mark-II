@@ -1,0 +1,94 @@
+{
+  "name": "mark-ii",
+  "version": "1.0.0",
+  "private": true,
+  "author": "Mohamed Sihly",
+  "description": "Mark II",
+  "homepage": "./",
+  "main": "public/main.js",
+  "icon": "public/favicon.ico",
+  "dependencies": {
+    "@electron/remote": "^2.0.8",
+    "@emotion/cache": "^11.7.1",
+    "@emotion/react": "^11.8.2",
+    "@emotion/styled": "^11.8.1",
+    "@mui/base": "^5.0.0-alpha.102",
+    "@mui/icons-material": "^5.5.1",
+    "@mui/material": "^5.5.2",
+    "@mui/styles": "^5.5.1",
+    "axios": "^1.2.0",
+    "color": "^4.2.3",
+    "dayjs": "^1.11.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonfile": "^6.1.0",
+    "md5-file": "^5.0.0",
+    "mobx": "^6.5.0",
+    "mobx-keystone": "^1.1.1",
+    "mobx-react-lite": "^3.3.0",
+    "mongodb-memory-server": "^8.9.3",
+    "mongoose": "^6.7.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-draggable": "^4.4.5",
+    "react-selecto": "^1.15.0",
+    "react-toastify": "^9.0.8",
+    "socket.io": "^4.5.4",
+    "socket.io-client": "^4.5.4",
+    "ts-node": "^10.9.1",
+    "tss-react": "^4.4.4",
+    "vite-plugin-electron-renderer": "^0.11.3"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.203",
+    "@types/color": "^3.0.3",
+    "@types/express": "^4.17.14",
+    "@types/node": "^17.0.45",
+    "@types/react": "^17.0.43",
+    "@types/react-dom": "^17.0.14",
+    "@vitejs/plugin-react": "^2.1.0",
+    "concurrently": "^7.2.2",
+    "electron": "^21.3.1",
+    "electron-builder": "^23.6.0",
+    "electron-devtools-installer": "^3.2.0",
+    "nodemon": "^2.0.20",
+    "patch-package": "^6.4.7",
+    "remotedev": "^0.2.9",
+    "ts-loader": "^9.4.1",
+    "typescript": "^4.6.3",
+    "vite": "^3.1.8",
+    "vite-plugin-svgr": "^2.2.2",
+    "vite-tsconfig-paths": "^3.5.1",
+    "wait-on": "^6.0.1"
+  },
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "pack": "electron-builder --dir",
+    "dist": "npm run build && electron-builder build --win -c.extraMetadata.main=build/main.js --publish never",
+    "postinstall": "electron-builder install-app-deps && patch-package",
+    "dev": "concurrently --kill-others \"SET BROWSER=none && npm start\" \"nodemon --watch './**/*.ts' --exec ts-node-esm ./src/server.mts\" \"electron .\""
+  },
+  "build": {
+    "appId": "com.msihly.mark-ii",
+    "extends": null,
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "artifactName": "Mark-II.exe",
+      "icon": "build/app-icon.ico",
+      "target": "portable"
+    }
+  },
+  "proxy": "http://localhost:3737",
+  "browserslist": {
+    "production": [
+      "last 3 chrome version"
+    ],
+    "development": [
+      "last 3 chrome version"
+    ]
+  }
+}

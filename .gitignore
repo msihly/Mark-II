@@ -1,0 +1,29 @@
+# dependencies
+*node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+.old/
+.ignore*
+
+# production
+build/
+dist/
+
+# misc
+.DS_Store
+*.env
+*.env.*
+env.*
+MongoDB
+npm-debug.log*
+.vscode/
+_components/
+*.psd
+*.ai
+*.db
+
+test_dir/
+output_dir/

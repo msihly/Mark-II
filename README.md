@@ -1,0 +1,3 @@
+This monorepo hosts both Mark II, a self-hosted Electron app replacement of the deprecated [OneMark](https://github.com/msihly/onemark) site, and a firefox add-on that replaces OneMark's [Chrome extension](https://github.com/msihly/onemark). The full history of this projects' iterations over the past several years are available on my GitHub for posterity.
+
+This project is currently in an incomplete state as I've been rather busy lately and it is a lower priority for me, so there are no demos until I've had a chance to further refine and test it. This project is made public as a code-only example of recent alternative techniques and features compared to [Media Viewer](https://github.com/msihly/media-viewer), which this project adapts several components and features from.
