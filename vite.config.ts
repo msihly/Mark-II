@@ -7,10 +7,11 @@ import pluginTsconfigPaths from "vite-tsconfig-paths";
 const EXTERNALS = ["crypto", "fs", "mongoose", "path"];
 
 export default defineConfig({
-  build: { outDir: "build" },
+  build: { outDir: "build", rollupOptions: { external: "ext" } },
+  optimizeDeps: { exclude: EXTERNALS },
   plugins: [
     pluginReact(),
-    pluginRenderer({ nodeIntegration: true, optimizeDeps: { include: EXTERNALS } }),
+    pluginRenderer({ nodeIntegration: true, resolve: () => EXTERNALS }),
     pluginSVGR(),
     pluginTsconfigPaths(),
   ],

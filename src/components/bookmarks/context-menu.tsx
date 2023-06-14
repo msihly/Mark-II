@@ -5,6 +5,7 @@ import { deleteBookmarks } from "database";
 import { Menu } from "@mui/material";
 import { ListItem, View, ViewProps } from "components";
 import { InfoModal } from ".";
+import { copyToClipboard } from "utils";
 
 interface ContextMenuProps extends ViewProps {
   children?: ReactNode | ReactNode[];
@@ -17,6 +18,11 @@ export const ContextMenu = observer(({ children, bookmark, ...props }: ContextMe
   const [isInfoOpen, setIsInfoOpen] = useState(false);
   const [mouseX, setMouseX] = useState(null);
   const [mouseY, setMouseY] = useState(null);
+
+  const copyLink = () => {
+    copyToClipboard(bookmark.pageUrl, `Copied: ${bookmark.pageUrl}`);
+    handleClose();
+  };
 
   const handleContext = (event) => {
     event.preventDefault();
@@ -57,6 +63,8 @@ export const ContextMenu = observer(({ children, bookmark, ...props }: ContextMe
           mouseX !== null && mouseY !== null ? { top: mouseY, left: mouseX } : undefined
         }
       >
+        <ListItem text="Copy" icon="ContentCopy" onClick={copyLink} {...listItemProps} />
+
         <ListItem text="Info" icon="Info" onClick={openInfo} {...listItemProps} />
 
         <ListItem

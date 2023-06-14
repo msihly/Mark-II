@@ -20,6 +20,7 @@
     "color": "^4.2.3",
     "dayjs": "^1.11.0",
     "dotenv": "^16.0.3",
+    "electron-log": "^4.4.8",
     "express": "^4.18.2",
     "jsonfile": "^6.1.0",
     "md5-file": "^5.0.0",
@@ -37,7 +38,7 @@
     "socket.io-client": "^4.5.4",
     "ts-node": "^10.9.1",
     "tss-react": "^4.4.4",
-    "vite-plugin-electron-renderer": "^0.11.3"
+    "vite-plugin-electron-renderer": "0.10.1"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.203",
@@ -62,16 +63,26 @@
     "wait-on": "^6.0.1"
   },
   "scripts": {
+    "compileserver": "tsc --p ./src/server/tsconfig.json",
     "start": "vite",
-    "build": "vite build",
+    "build": "npm run compileserver && vite build",
     "pack": "electron-builder --dir",
     "dist": "npm run build && electron-builder build --win -c.extraMetadata.main=build/main.js --publish never",
     "postinstall": "electron-builder install-app-deps && patch-package",
-    "dev": "concurrently --kill-others \"SET BROWSER=none && npm start\" \"nodemon --watch './**/*.ts' --exec ts-node-esm ./src/server.mts\" \"electron .\""
+    "dev": "npm run compileserver && concurrently --kill-others \"SET BROWSER=none && npm start\" \"electron .\""
   },
   "build": {
     "appId": "com.msihly.mark-ii",
     "extends": null,
+    "extraResources": [
+      {
+        "from": "./extraResources/",
+        "to": "extraResources/",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
     "files": [
       "build/**/*",
       "node_modules/**/*"

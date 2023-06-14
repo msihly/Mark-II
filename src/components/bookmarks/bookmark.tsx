@@ -91,7 +91,7 @@ const useClasses = makeClasses((theme, { selected }) => ({
   },
   image: {
     width: "100%",
-    minHeight: "9rem",
+    height: "16rem",
     objectFit: "cover",
     borderTopLeftRadius: "inherit",
     borderTopRightRadius: "inherit",
@@ -142,7 +142,7 @@ const useClasses = makeClasses((theme, { selected }) => ({
     left: 0,
     right: 0,
     padding: "0.5rem 0.5rem 0.2rem",
-    background: `linear-gradient(to bottom, transparent, rgb(0 0 0 / 0.6))`,
+    background: `linear-gradient(to bottom, transparent, rgb(0 0 0 / 0.9))`,
     fontSize: "0.8em",
     textAlign: "center",
     whiteSpace: "nowrap",

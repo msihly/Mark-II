@@ -6,6 +6,7 @@ import { observer } from "mobx-react-lite";
 import { useStores } from "store";
 import { Drawer, BookmarkContainer, TopBar, View } from "components";
 import { CONSTANTS, makeClasses } from "utils";
+import env from "../env/index.js";
 
 export const Home = observer(() => {
   const drawerRef = createRef();
@@ -41,25 +42,32 @@ export const Home = observer(() => {
       }
     };
 
-    const createSocket = async () => {
+    const connectToSocket = async () => {
       try {
-        const socket = io(`ws://localhost:${process.env.SOCKET_PORT}`);
+        console.debug("Pinging server...");
+        const res = await (
+          await fetch(`http://localhost:${env.SERVER_PORT}/api/ping`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ msg: "pong" }),
+          })
+        ).json();
+        console.debug("Ping response:", res);
+
+        console.debug(`Connecting to socket on port ${env.SOCKET_PORT}...`);
+        const socket = io(`http://localhost:${env.SOCKET_PORT}`);
 
         socket.on("connected", () => console.debug("Socket.io connected."));
 
-        socket.on("dbConnected", (databaseUri) => {
-          loadStores(databaseUri);
-        });
+        socket.on("dbConnected", (databaseUri) => loadStores(databaseUri));
 
-        socket.on("createBookmark", (bookmark) => {
-          console.log({ bookmark });
-        });
+        socket.on("createBookmark", (bookmark) => console.debug({ bookmark }));
       } catch (err) {
         console.error(err);
       }
     };
 
-    createSocket();
+    connectToSocket();
   }, []);
 
   return (

@@ -2,18 +2,18 @@
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "src",
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "module": "esnext",
+    "module": "CommonJS",
     "moduleResolution": "node",
-    "noEmit": true,
+    "noEmit": false,
     "noFallthroughCasesInSwitch": false,
     "noImplicitAny": false,
+    "outDir": "../../extraResources/",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": false,
@@ -21,6 +21,5 @@
     "types": ["node", "vite/client", "vite-plugin-svgr/client"],
     "useDefineForClassFields": true
   },
-  "include": ["src"],
-  "exclude": ["ext", "node_modules", "MongoDB"]
+  "include": ["server.mts", "../env"]
 }
