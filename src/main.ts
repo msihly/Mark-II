@@ -1,33 +1,21 @@
-const { app, BrowserWindow, Menu, nativeImage, Tray } = require("electron");
-const remoteMain = require("@electron/remote/main");
-remoteMain.initialize();
-const logToFile = require("electron-log");
-const path = require("path");
-const { readFile } = require("fs/promises");
+import { app, BrowserWindow, Menu, nativeImage, Tray } from "electron";
+import path from "path";
+import { readFile } from "fs/promises";
+import { logToFile } from "./utils";
 
 const baseUrl = !app.isPackaged
   ? `http://localhost:3737`
-  : `file://${path.join(__dirname, "../build/index.html")}`;
-
-const debug = (...args) => {
-  console.debug(...args);
-  logToFile.debug(...args);
-};
-
-const error = (...args) => {
-  console.error(...args);
-  logToFile.error(...args);
-};
+  : `file://${path.join(__dirname, "..", "index.html")}`;
 
 /* ------------------------------- MAIN WINDOW ------------------------------ */
 let mainWindow = null;
 
 const createMainWindow = async () => {
-  debug("Loading servers...");
+  logToFile("debug", "Loading servers...");
 
   const serverUrl = app.isPackaged
-    ? path.resolve(process.resourcesPath, "extraResources/server/server.mjs")
-    : path.join(__dirname, "../extraResources/server/server.mjs");
+    ? path.resolve(process.resourcesPath, "extraResources/server.mjs")
+    : path.join(__dirname, "../extraResources/server.mjs");
 
   /** Using eval is the only method that works with packaged executable for indeterminable reason. */
   eval(await readFile(serverUrl, { encoding: "utf8" }));
@@ -38,11 +26,13 @@ const createMainWindow = async () => {
     webPreferences: { contextIsolation: false, nodeIntegration: true, webSecurity: false },
   });
 
+  const remoteMain = await import("@electron/remote/main");
+  remoteMain.initialize();
   remoteMain.enable(mainWindow.webContents);
 
-  debug("Loading main window...");
+  logToFile("debug", "Loading main window...");
   await mainWindow.loadURL(baseUrl);
-  debug("Main window loaded.");
+  logToFile("debug", "Main window loaded.");
 
   if (!app.isPackaged) mainWindow.webContents.openDevTools({ mode: "bottom" });
 
@@ -61,7 +51,7 @@ app.whenReady().then(async () => {
   //   } = require("electron-devtools-installer");
 
   //   await installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS]).catch((err) =>
-  //     error("Error loading extensions:", err)
+  //     logToFile("error", "Error loading extensions:", err)
   //   );
   // }
 
@@ -90,6 +80,6 @@ app.whenReady().then(async () => {
       if (mainWindow && !mainWindow.isVisible()) mainWindow.show();
     });
   } catch (err) {
-    error(err);
+    logToFile("error", err);
   }
 });

@@ -1,8 +1,8 @@
 import { promises as fs } from "fs";
 import md5File from "md5-file";
-import { Bookmark, BookmarkModel } from "database";
-import { BookmarkStore } from "store";
-import { checkFileExists, copyFile, dayjs, PromiseQueue, splitArray } from "utils";
+import { Bookmark, BookmarkModel } from "../models";
+import { BookmarkStore } from "../../store";
+import { checkFileExists, copyFile, dayjs, PromiseQueue, splitArray } from "../../utils";
 
 export const deleteBookmarks = async (
   bookmarkStore: BookmarkStore,

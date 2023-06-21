@@ -5,7 +5,7 @@
   "author": "Mohamed Sihly",
   "description": "Mark II",
   "homepage": "./",
-  "main": "public/main.js",
+  "main": "extraResources/main.js",
   "icon": "public/favicon.ico",
   "dependencies": {
     "@electron/remote": "^2.0.8",
@@ -16,6 +16,8 @@
     "@mui/icons-material": "^5.5.1",
     "@mui/material": "^5.5.2",
     "@mui/styles": "^5.5.1",
+    "@trpc/client": "^10.30.0",
+    "@trpc/server": "^10.30.0",
     "axios": "^1.2.0",
     "color": "^4.2.3",
     "dayjs": "^1.11.0",
@@ -36,9 +38,13 @@
     "react-toastify": "^9.0.8",
     "socket.io": "^4.5.4",
     "socket.io-client": "^4.5.4",
+    "superjson": "^1.12.3",
     "ts-node": "^10.9.1",
     "tss-react": "^4.4.4",
-    "vite-plugin-electron-renderer": "0.10.1"
+    "util": "^0.12.5",
+    "vite-plugin-commonjs": "^0.7.1",
+    "vite-plugin-electron-renderer": "0.10.1",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.203",
@@ -49,7 +55,7 @@
     "@types/react-dom": "^17.0.14",
     "@vitejs/plugin-react": "^2.1.0",
     "concurrently": "^7.2.2",
-    "electron": "^21.3.1",
+    "electron": "^25.1.1",
     "electron-builder": "^23.6.0",
     "electron-devtools-installer": "^3.2.0",
     "nodemon": "^2.0.20",
@@ -63,17 +69,21 @@
     "wait-on": "^6.0.1"
   },
   "scripts": {
-    "compileserver": "tsc --p ./src/server/tsconfig.json",
-    "start": "vite",
-    "build": "npm run compileserver && vite build",
+    "build": "npm run tsCompile && vite build && npx copyfiles extraResources/**/* build",
+    "dev": "npm run tsCompile && concurrently --kill-others \"SET BROWSER=none && npm start\" \"electron .\"",
+    "dist": "npm run build && npm run electron-build",
+    "electron-build": "electron-builder build --win --publish never",
     "pack": "electron-builder --dir",
-    "dist": "npm run build && electron-builder build --win -c.extraMetadata.main=build/main.js --publish never",
     "postinstall": "electron-builder install-app-deps && patch-package",
-    "dev": "npm run compileserver && concurrently --kill-others \"SET BROWSER=none && npm start\" \"electron .\""
+    "start": "vite",
+    "tsCompile": "tsc --p ./tsconfig.build.json"
   },
   "build": {
     "appId": "com.msihly.mark-ii",
     "extends": null,
+    "extraMetadata": {
+      "main": "build/extraResources/main.js"
+    },
     "extraResources": [
       {
         "from": "./extraResources/",

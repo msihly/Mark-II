@@ -1,12 +1,8 @@
 import { createRef, useEffect } from "react";
-import Mongoose from "mongoose";
-import { io } from "socket.io-client";
-import { getAllBookmarks, getAllTags } from "database";
 import { observer } from "mobx-react-lite";
 import { useStores } from "store";
 import { Drawer, BookmarkContainer, TopBar, View } from "components";
-import { CONSTANTS, makeClasses } from "utils";
-import env from "../env/index.js";
+import { makeClasses, trpc } from "utils";
 
 export const Home = observer(() => {
   const drawerRef = createRef();
@@ -23,16 +19,14 @@ export const Home = observer(() => {
     document.title = "Home";
     console.debug("Home window useEffect fired.");
 
-    const loadStores = async (databaseUri: string) => {
+    const loadStores = async () => {
       try {
-        console.debug("Connecting to database:", databaseUri, "...");
-        await Mongoose.connect(databaseUri, CONSTANTS.MONGOOSE_OPTS);
-
-        console.debug("Connected to database. Retrieving data...");
-        const [bookmarks, tags] = await Promise.all([getAllBookmarks(), getAllTags()]);
+        const [bookmarks, tags] = await Promise.all([
+          trpc.listBookmarks.query(),
+          trpc.listTags.query(),
+        ]);
 
         console.debug("Data retrieved. Storing in MobX...");
-
         tagStore.overwrite(tags);
         bookmarkStore.overwrite(bookmarks);
 
@@ -42,32 +36,7 @@ export const Home = observer(() => {
       }
     };
 
-    const connectToSocket = async () => {
-      try {
-        console.debug("Pinging server...");
-        const res = await (
-          await fetch(`http://localhost:${env.SERVER_PORT}/api/ping`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ msg: "pong" }),
-          })
-        ).json();
-        console.debug("Ping response:", res);
-
-        console.debug(`Connecting to socket on port ${env.SOCKET_PORT}...`);
-        const socket = io(`http://localhost:${env.SOCKET_PORT}`);
-
-        socket.on("connected", () => console.debug("Socket.io connected."));
-
-        socket.on("dbConnected", (databaseUri) => loadStores(databaseUri));
-
-        socket.on("createBookmark", (bookmark) => console.debug({ bookmark }));
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    connectToSocket();
+    loadStores();
   }, []);
 
   return (

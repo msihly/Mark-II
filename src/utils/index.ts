@@ -12,5 +12,7 @@ export * from "./date-and-time";
 export * from "./formatting";
 export * from "./files";
 export * from "./hooks";
+export * from "./logging";
 export * from "./math";
 export * from "./miscellaneous";
+export * from "./trpc";

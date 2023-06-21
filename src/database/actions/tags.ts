@@ -1,6 +1,6 @@
-import { BookmarkModel, Tag, TagModel } from "database";
-import { BookmarkStore, TagStore } from "store";
-import { dayjs } from "utils";
+import { BookmarkModel, Tag, TagModel } from "../models";
+import { BookmarkStore, TagStore } from "../../store";
+import { dayjs } from "../../utils";
 
 export const createTag = async ({
   aliases = [],
